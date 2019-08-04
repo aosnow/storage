@@ -4,20 +4,11 @@
 // created: 2019/8/4 1:18
 // ------------------------------------------------------------------------------
 
-import Token from './token';
+import Response from './response';
+import TokenHeader from './token';
+import transformResponse from './transformResponse';
 
 // 所有需要注册的拦截器列表
-const interceptors = [Token];
+const interceptors = [TokenHeader, Response];
 
-/**
- * 注册拦截器集合
- * @param {EasyHttp} easyHttp
- */
-const register = function(easyHttp) {
-  interceptors.forEach(item => {
-    const { type, interceptor, error } = item;
-    easyHttp.useInterceptor(type, interceptor, error);
-  });
-};
-
-export default register;
+export { interceptors, transformResponse };

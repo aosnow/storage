@@ -40,26 +40,28 @@ const Actions = {
   // persist: PersistedAction,
   // 备用 => 留用于后期登录结构修改
   // 登录
-  login({ dispatch }, params) {
+  login({ dispatch, commit }, params) {
     // return dispatch('persist', {
     //   type: 'user/setLogInfo',
     //   getData() {
     return new Promise((resolve, reject) => {
-      Vue.http.post('/api/v2/user-system/login/login', params).then(({ data }) => {
-        if (data.code === '10000') {
-          // 检测 token 有效性
-          if (data.data && data.data.token) {
-            resolve(data.data);
-          }
-          else {
-            reject(new Error('登录失败或服务器异常'));
-          }
-        }
-        else {
-          reject(new Error(data['sub_msg'] || data.msg));
-        }
-      }).catch(reason => {
-        reject(reason);
+      // TODO: 持久存储拦截时，简化入参的 Promise
+      // TODO: 如何过滤返回值，并进行持久存储
+      Vue.http.post('/api/v2/user-system/login/login', params).then((data) => {
+        commit('setLogInfo', Object.freeze(data));
+
+        // if (data.code === '10000') {
+        //   // 检测 token 有效性
+        //   if (data.data && data.data.token) {
+        //     resolve(data.data);
+        //   }
+        //   else {
+        //     reject(new Error('登录失败或服务器异常'));
+        //   }
+        // }
+        // else {
+        //   reject(new Error(data['sub_msg'] || data.msg));
+        // }
       });
     });
     //   }
