@@ -85,7 +85,9 @@ export default {
     }),
     userlogin() {
       const { username, password } = this;
-      this.login({ username, password });
+      this.login({ username, password }).then(data => {
+        console.warn('userlogin', data);
+      });
     },
     userexit() {
       this.logout();
@@ -106,7 +108,7 @@ export default {
 </script>
 
 <style>
-#app {
+#app{
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

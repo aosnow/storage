@@ -44,10 +44,10 @@ const Actions = {
     // return dispatch('persist', {
     //   type: 'user/setLogInfo',
     //   getData() {
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
       // TODO: 持久存储拦截时，简化入参的 Promise
       // TODO: 如何过滤返回值，并进行持久存储
-      Vue.http.post('/api/v2/user-system/login/login', params).then((data) => {
+      return Vue.http.post('/api/v2/user-system/login/login', params).then((data) => {
         commit('setLogInfo', Object.freeze(data));
 
         // if (data.code === '10000') {
@@ -63,7 +63,7 @@ const Actions = {
         //   reject(new Error(data['sub_msg'] || data.msg));
         // }
       });
-    });
+    // });
     //   }
     // });
   },
