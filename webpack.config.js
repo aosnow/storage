@@ -15,7 +15,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
-      '@mudas/storage': resolve('packages/index.js')
+      '@mudas/storage': resolve('packages'),
+      '@mudas/vuex': resolve('vuex')
     }
   }
 };

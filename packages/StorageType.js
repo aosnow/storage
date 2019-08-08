@@ -1,7 +1,7 @@
 /**
  * 存储引擎的类型
  */
-const STORAGE_TYPE = {
+const StorageType = {
   localStorage: 'localStorage',
   sessionStorage: 'sessionStorage',
   memory: 'memory',
@@ -17,4 +17,4 @@ const STORAGE_TYPE = {
   }
 };
 
-export default STORAGE_TYPE;
+export default StorageType;

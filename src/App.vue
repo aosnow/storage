@@ -1,28 +1,6 @@
 <template>
   <div id="app">
 
-    <h2>Cookie 测试:</h2>
-    <el-form label-width="100px">
-      <el-form-item label="Key:">
-        <el-input v-model="key"></el-input>
-        <el-button @click="deleteCookie">删除</el-button>
-      </el-form-item>
-
-      <el-form-item label="Value:">
-        <el-input v-model="value"></el-input>
-      </el-form-item>
-
-      <el-form-item label="Cookies:">
-        <el-alert title="" type="info">{{cookies}}</el-alert>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button @click="setCookie">设置</el-button>
-        <el-button @click="getCookie">读取</el-button>
-        <el-button @click="clearCookie">清空</el-button>
-      </el-form-item>
-    </el-form>
-
     <h2>登录测试:</h2>
     <el-form label-width="100px">
       <el-form-item label="username:">
@@ -35,6 +13,11 @@
 
       <el-form-item>
         <el-button @click="userlogin">登录</el-button>
+        <el-button @click="userexit">退出</el-button>
+      </el-form-item>
+
+      <el-form-item>
+        {{loginfo}}
       </el-form-item>
     </el-form>
 
@@ -48,7 +31,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { Cookie } from '@mudas/storage';
 
 export default {
   name: 'app',
@@ -65,19 +47,13 @@ export default {
     };
   },
 
+  computed: {
+    loginfo() {
+      return this.$store.getters['user/loginfo'];
+    }
+  },
+
   methods: {
-    setCookie() {
-      Cookie.setItem(this.key, this.value, {});
-    },
-    getCookie() {
-      this.cookies = document.cookie;
-    },
-    deleteCookie() {
-      Cookie.removeItem(this.key);
-    },
-    clearCookie() {
-      Cookie.clear();
-    },
 
     ...mapActions({
       login: 'user/login',
@@ -86,7 +62,7 @@ export default {
     userlogin() {
       const { username, password } = this;
       this.login({ username, password }).then(data => {
-        console.warn('userlogin', data);
+        console.warn('ui.userlogin', data);
       });
     },
     userexit() {
@@ -108,7 +84,7 @@ export default {
 </script>
 
 <style>
-#app{
+#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

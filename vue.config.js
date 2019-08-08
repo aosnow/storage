@@ -71,7 +71,8 @@ module.exports = {
 
     // 路径别名
     config.resolve.alias.set('@', resolve('src'));
-    config.resolve.alias.set('@mudas/storage', resolve('packages/index.js'));
+    config.resolve.alias.set('@mudas/storage', resolve('packages'));
+    config.resolve.alias.set('@mudas/vuex', resolve('vuex'));
 
     // 不生成 html
     if (!isDebug) {

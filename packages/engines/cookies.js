@@ -12,10 +12,13 @@ export default {
    */
   storage: Cookie,
   getItem(key) {
-    return this.storage.get(key);
+    let value = this.storage.get(key);
+    value = !value ? null : JSON.parse(unescape(value));
+    return value;
   },
   setItem(key, value, options = { path: '' }) {
-    this.storage.set(key, value, options);
+    value = value !== undefined ? JSON.stringify(value) : '';
+    this.storage.set(key, escape(value), options);
   },
   removeItem(key) {
     this.storage.remove(key);

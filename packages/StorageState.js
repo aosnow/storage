@@ -5,24 +5,20 @@
 // ------------------------------------------------------------------------------
 
 import { merge } from 'lodash-es';
-import STORAGE_TYPE from 'StorageType';
+import STORAGE_TYPE from './StorageType';
 import LocalStorage from './engines/local';
 import SessionStorage from './engines/session';
 import MemoryStorage from './engines/memory';
 import CookieStorage from './engines/cookies';
 
-class PersistedState {
+class StorageState {
 
   /**
    * 构建实例
    * @param {{expire:Number, storage:String}|null} [options] 全局配置，可通过私有配置进行覆盖
    */
   constructor(options = null) {
-    this._options = merge(
-      {},
-      PersistedState.DefaultOptions,
-      options || Object.create(null)
-    );
+    this._options = merge(StorageState.DefaultOptions, options);
   }
 
   // --------------------------------------------------------------------------
@@ -34,7 +30,7 @@ class PersistedState {
   // 默认配置
   static DefaultOptions = {
     expire: 0, // 0-永久不超时，直到生命周期结束; 其它值以 秒 为单位判断超时
-    storage: STORAGE_TYPE.localStorage // 默认缓存存储引擎
+    storage: STORAGE_TYPE.sessionStorage // 默认缓存存储引擎
   };
 
   // ----------------------------------------
@@ -46,14 +42,14 @@ class PersistedState {
    * @type {{expire:Number, storage:String}|null}
    * @private
    */
-  _options = null;
+  _options;
 
   // ----------------------------------------
   // unique
   // ----------------------------------------
 
   // 标识当前存储目标做用域的唯一键值
-  _unique = null;
+  _unique;
 
   /**
    * 唯一识别码
@@ -65,22 +61,24 @@ class PersistedState {
       // 都指定到 root 顶级作用域，所有应用共用
       code = null;
     }
-    else if (typeof code === 'string') {
-      // 指定到特殊的“应用级局部作用域”
+    else {
+      if (typeof code === 'string') {
+        // 指定到特殊的“应用级局部作用域”
 
-      // 不能包含空白字符
-      if (/\s+/.test(code)) {
-        throw new Error('no blank characters can be included');
-      }
+        // 不能包含空白字符
+        if (/\s+/.test(code)) {
+          throw new Error('no blank characters can be included');
+        }
 
-      // 不能小于6位
-      if (code.length < 6) {
-        throw new Error('the length is too small');
-      }
+        // 不能小于6位
+        if (code.length < 6) {
+          throw new Error('the length is too small');
+        }
 
-      // 若只有字母、数字也警告
-      if (/^[a-z0-9]+$/i.test(code)) {
-        console.warn('it\'s too simple, should contain letters, numbers and special symbols.');
+        // 若只有字母、数字也警告
+        if (/^([a-z]+|[0-9]+)$/i.test(code)) {
+          console.warn(`unique code[${code}] is too simple, should contain letters, numbers and special symbols.`);
+        }
       }
     }
 
@@ -88,7 +86,7 @@ class PersistedState {
   }
 
   get unique() {
-    return `storage-scope[${this._unique || 'root'}]`;
+    return this._unique;
   }
 
   // --------------------------------------------------------------------------
@@ -162,9 +160,10 @@ class PersistedState {
    */
   genKey(key) {
     // 若未设置 unique，则不使用“域规则”
-    return this.unique ? `${key}@${this.unique}` : key;
+    const uniqueKey = `[${this.unique || 'root'}]`;
+    return this.unique ? `${key}@${uniqueKey}` : key;
   }
 
 }
 
-export default PersistedState;
+export default StorageState;

@@ -18,11 +18,14 @@ import ServiceError from '@/error/ServiceError';
 // 所有网络请求错误，都将在此拦截器被首先捕捉到，可以考虑统一输出相同格式的 Error 结构
 export default {
   type: 'response',
+
   interceptor: response => {
     // 只处理数据逻辑，此处默认都是正确数据（因为此处实际已进入 then 进程，要想在 then 前拦截需要使用 transformResponse）
-    console.warn('interceptor:', response);
+    const { data } = response;
+
     return response;
   },
+
   error: error => {
     // 网络错误、取消请求、请求超时等
     // 服务器返回的业务错误不做二次转换处理
