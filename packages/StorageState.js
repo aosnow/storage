@@ -101,13 +101,13 @@ class StorageState {
    * @returns {{type, storage, getItem, setItem, removeItem, clear}}
    */
   _storage(storageType) {
-    storageType = storageType || this._options.storage || STORAGE_TYPE.memory;
+    storageType = storageType || this._options.storage || StorageType.memory;
     switch (storageType) {
-      case STORAGE_TYPE.localStorage:
+      case StorageType.localStorage:
         return LocalStorage;
-      case STORAGE_TYPE.sessionStorage:
+      case StorageType.sessionStorage:
         return SessionStorage;
-      case STORAGE_TYPE.cookie:
+      case StorageType.cookie:
         return CookieStorage;
       default:
         return MemoryStorage;
@@ -121,7 +121,7 @@ class StorageState {
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
    * @returns {*|void}
    */
-  setState(key, state, storageType = STORAGE_TYPE.sessionStorage) {
+  setState(key, state, storageType = StorageType.sessionStorage) {
     const s = this._storage(storageType);
     const k = this.genKey(key);
     return s.setItem(k, state);
