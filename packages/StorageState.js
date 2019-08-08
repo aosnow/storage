@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------------
 
 import { merge } from 'lodash-es';
-import STORAGE_TYPE from './StorageType';
+import StorageType from './StorageType';
 import LocalStorage from './engines/local';
 import SessionStorage from './engines/session';
 import MemoryStorage from './engines/memory';
@@ -30,7 +30,7 @@ class StorageState {
   // 默认配置
   static DefaultOptions = {
     expire: 0, // 0-永久不超时，直到生命周期结束; 其它值以 秒 为单位判断超时
-    storage: STORAGE_TYPE.sessionStorage // 默认缓存存储引擎
+    storage: StorageType.sessionStorage // 默认缓存存储引擎
   };
 
   // ----------------------------------------

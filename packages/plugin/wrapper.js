@@ -30,7 +30,6 @@ const ActionName = '__interceptorAction';
 //
 //         // 得到正确的数据写入到缓存
 //         res.then(data => {
-//           // TODO: 写入缓存数据的方法
 //           console.warn('success22:', data);
 //         });
 //
