@@ -16,4 +16,11 @@ export default {
   StorageConfig,
   StorageState
 };
-export { Storage, StorageType, StorageConfig, StorageState };
+
+export {
+  install,
+  Storage as Store,
+  StorageType,
+  StorageConfig,
+  StorageState
+};

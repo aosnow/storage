@@ -39,18 +39,19 @@ const Actions = {
         handler() {
           return Vue.http.post('/api/v2/user-system/login/login', params)
                     .then(({ data }) => {
-                      return Promise.resolve(Object.freeze(data));
+                      // Please don't commit here, otherwise you can't automatically restore the cache to state.
+                      return Promise.resolve(data);
                     })
                     .catch(reason => {
-                      console.warn('--------------------------------------------');
-                      console.warn(reason);
+                      return Promise.reject(reason);
                     });
         },
         success(data) {
-          // TODO: 网络状态异常的处理
-          // console.warn('============================================');
-          // console.warn(data);
+          console.warn('success:', data);
           context.commit('logInfo', data.data);
+        },
+        error(reason) {
+          console.warn('error:', reason);
         }
       }
     );

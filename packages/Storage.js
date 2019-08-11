@@ -10,7 +10,7 @@ import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
 import InitMixin from './mixin';
 
-export let Vue; // bind on install
+let Vue; // bind on install
 
 export function install(_Vue) {
   if (Vue && _Vue === Vue) return;
@@ -153,7 +153,7 @@ export class Storage {
       // 只对已经存在缓存数据的配置进行
       const cacheData = this.resolve(conf);
 
-      if (cacheData) {
+      if (cacheData && StorageConfig.needRestore(conf)) {
         // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
         store.dispatch(key);
       }

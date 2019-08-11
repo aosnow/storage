@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -51,6 +52,10 @@ export default {
     loginfo() {
       return this.$store.getters['user/loginfo'];
     }
+  },
+
+  created() {
+    console.warn(Vue.storage);
   },
 
   methods: {

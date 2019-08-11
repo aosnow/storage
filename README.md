@@ -3,7 +3,7 @@
 > 这是一个同时支持 sessionStorage、localStorage、cook、map 存储数据的工具库  
 This is a tool library that supports session Storage, local Storage, cookie, map to store data.
 
-![image](https://github.com/aosnow/assets/blob/master/img/storage.png)
+![image](https://raw.githubusercontent.com/aosnow/assets/master/img/storage.png)
 
 ## Setup
 install:
@@ -21,6 +21,57 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 ```
+
+For example, the following 'Action' need to be adapted to use automatic caching:
+```js
+// before
+const Actions = {
+  login(context, params) {
+    return Vue.http.post('/api/v2/user-system/login/login', params)
+              .then(({ data }) => {
+                return Object.freeze(data);
+              })
+              .catch(reason => {
+                console.warn(reason);
+              });
+  }
+};
+```
+Reform：
+```js
+// after
+const Actions = {
+  login(context, params) {
+    // 'this' points to store
+    return this.dispatch(
+      this.interceptor,
+      {
+        type: 'user/login',
+        force: false, // default false, whether to force a new request for data
+        handler() {
+          return Vue.http.post('/api/v2/user-system/login/login', params)
+                    .then(({ data }) => {
+                      // please don't commit here, otherwise you can't automatically restore the cache to state.
+                      return Promise.resolve(data);
+                    })
+                    .catch(reason => {
+                      return Promise.reject(reason);
+                    });
+        },
+        success(data) {
+          // ...some commit, and acting on automatic restore to state
+          context.commit('logInfo', data.data);
+        },
+        error(reason) {
+          // capture errors to prevent dispatch to callers
+          console.warn('error:', reason);
+        }
+      }
+    );
+  }
+};
+```
+
 
 ## Feature
 Automatically complete the integration with Vuex.Store, contain the following feature:
@@ -48,14 +99,15 @@ This parameter is used to override the default global cache configuration：
   storage: StorageType.sessionStorage // default storage engine
 }
 ```
-- #### expire: Number
-  the number of seconds that are timed out, 0 means never timed out.
-- #### storage: String
-  storage engine(localStorage, session Storage, cookie, memory)
+- #### global state config
+  - #### expire: Number
+    the number of seconds that are timed out, 0 means never timed out.
+  - #### storage: String
+    storage engine(localStorage, session Storage, cookie, memory)
 
 ### options.config：
 - #### type: Array
-global config setter.
+cache rule.
 
 - #### example：
 ```js
@@ -64,6 +116,11 @@ global config setter.
 ]
 ```
 - #### config item options
-  - ##### type: String（action path，e.g `user/login`）
+  - ##### type: String
+    action path，e.g `user/login`
   - ##### storage: String
+    storage engine(localStorage, session Storage, cookie, memory)
   - ##### expire: Number（unit/seconds）
+    the number of seconds that are timed out, 0 means never timed out.
+  - ##### restore: Boolean（`default: true`）
+    whether application initialization automatically restores caching
