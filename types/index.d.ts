@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------------
 
 import Vue from 'vue';
+import { PluginFunction } from 'vue';
 import Storage from './Storage';
 import StorageType from './StorageType';
 import StorageConfig from './StorageConfig';
@@ -12,18 +13,17 @@ import StorageState from './StorageState';
 
 export declare function install(Vue:Vue):void;
 
-declare const Store = Storage;
+declare const _default:{
+  /**
+   * 做为 Vue 插件提供注册，绑定 EasyHttp 实例到 Vue.http
+   * @param {Vue} Vue
+   */
+  install:PluginFunction<any>;
 
-export default {
-  Store: Storage,
-  StorageType,
-  StorageConfig,
-  StorageState
+  Store:typeof Storage;
+  StorageType:typeof StorageType;
+  StorageConfig:typeof StorageConfig;
+  StorageState:typeof StorageState;
 };
 
-export {
-  Storage as Store,
-  StorageType,
-  StorageConfig,
-  StorageState
-};
+export default _default;

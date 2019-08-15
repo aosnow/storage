@@ -9,7 +9,7 @@ import StorageType from './StorageType';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
 
-export default {
+const _default = {
   install,
   Store: Storage,
   StorageType,
@@ -17,8 +17,8 @@ export default {
   StorageState
 };
 
+export default _default;
 export {
-  install,
   Storage as Store,
   StorageType,
   StorageConfig,
