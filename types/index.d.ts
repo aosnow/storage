@@ -12,7 +12,7 @@ import StorageState from './StorageState';
 
 // 扩展 Vue 静态属性，若是实例属性直接扩展 interface Vue 即可
 declare module 'vue/types/vue' {
-  export interface VueConstructor {
+  interface VueConstructor {
     storage:Storage;
   }
 }
@@ -23,7 +23,7 @@ declare const _default:{
   install:typeof install,
   Store:typeof Storage,
   StorageType:typeof StorageType,
-  StorageConfig:StorageConfig,
-  StorageState:StorageState
+  StorageConfig:typeof StorageConfig,
+  StorageState:typeof StorageState
 };
 export default _default;
