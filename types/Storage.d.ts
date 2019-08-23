@@ -7,8 +7,14 @@
 import StorageConfig, { ConfigOptions } from './StorageConfig';
 import StorageState, { StateOptions } from './StorageState';
 
+export declare interface StorageOptions {
+  unique?:string,
+  state?:StateOptions,
+  config?:Array<ConfigOptions>
+}
+
 declare class Storage {
-  constructor(options:{ unique?:string, state?:StateOptions, config?:ConfigOptions })
+  constructor(options?:StorageOptions)
 
   config:StorageConfig;
   state:StorageState;

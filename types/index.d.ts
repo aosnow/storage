@@ -4,26 +4,26 @@
 // created: 2019/8/4
 // ------------------------------------------------------------------------------
 
-import Vue from 'vue';
-import { PluginFunction } from 'vue';
-import Storage from './Storage';
+import _Vue from 'vue';
+import Storage, { StorageOptions } from './Storage';
 import StorageType from './StorageType';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
 
-export declare function install(Vue:Vue):void;
+// 扩展 Vue 静态属性，若是实例属性直接扩展 interface Vue 即可
+declare module 'vue/types/vue' {
+  export interface VueConstructor {
+    storage:Storage;
+  }
+}
+
+export declare function install(Vue:typeof _Vue, options?:StorageOptions):void;
 
 declare const _default:{
-  /**
-   * 做为 Vue 插件提供注册，绑定 EasyHttp 实例到 Vue.http
-   * @param {Vue} Vue
-   */
-  install:PluginFunction<any>;
-
-  Store:typeof Storage;
-  StorageType:typeof StorageType;
-  StorageConfig:typeof StorageConfig;
-  StorageState:typeof StorageState;
+  install:typeof install,
+  Store:typeof Storage,
+  StorageType:typeof StorageType,
+  StorageConfig:StorageConfig,
+  StorageState:StorageState
 };
-
 export default _default;

@@ -18,9 +18,3 @@ const _default = {
 };
 
 export default _default;
-export {
-  Storage as Store,
-  StorageType,
-  StorageConfig,
-  StorageState
-};
