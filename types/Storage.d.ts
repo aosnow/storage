@@ -4,6 +4,7 @@
 // created: 2019/8/8
 // ------------------------------------------------------------------------------
 
+import { Store } from 'vuex/types';
 import StorageConfig, { ConfigOptions } from './StorageConfig';
 import StorageState, { StateOptions } from './StorageState';
 
@@ -12,6 +13,8 @@ export declare interface StorageOptions {
   state?:StateOptions,
   config?:Array<ConfigOptions>
 }
+
+type RestoreHandler = (cacheData:any, conf:any) => void;
 
 declare class Storage {
   constructor(options?:StorageOptions)
@@ -56,9 +59,9 @@ declare class Storage {
 
   /**
    * 将已经缓存的数据恢复到 state 中
-   * @param type
+   * @param {Store|Function} store 由 store.dispatch 派发 Action 来触发缓存请求和恢复。也可以由自定义的方法fn(cacheData,conf)来完成缓存的恢复
    */
-  restore(type:string):void;
+  restore(store:Store<any> | RestoreHandler):void;
 }
 
 export default Storage;

@@ -27,7 +27,7 @@ export class Storage {
   // --------------------------------------------------------------------------
   constructor({ unique = '', state = null, config = null }) {
     if (process.env.NODE_ENV !== 'production') {
-      assert(Vue, `must call Vue.use(Storage) before creating a store instance.`);
+      // assert(Vue, `must call Vue.use(Storage) before creating a store instance.`);
       assert(typeof Promise !== 'undefined', `storage requires a Promise polyfill in this browser.`);
       assert(this instanceof Storage, `store must be called with the new operator.`);
     }
@@ -146,7 +146,7 @@ export class Storage {
 
   /**
    * 将已经缓存的数据恢复到 state 中
-   * @param {vuex.Store} store
+   * @param {vuex.Store|Function} store 由 store.dispatch 派发 Action 来触发缓存请求和恢复。也可以由自定义的方法fn(cacheData,conf)来完成缓存的恢复
    */
   restore(store) {
     this.config.forEach((conf, key) => {
@@ -154,8 +154,15 @@ export class Storage {
       const cacheData = this.resolve(conf);
 
       if (cacheData && StorageConfig.needRestore(conf)) {
-        // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
-        store.dispatch(key);
+        if (typeof store === 'function') {
+          // 自定义恢复方法 fn(cacheData,conf)
+          store.call(this, cacheData, conf);
+        }
+        else {
+          // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
+          store.dispatch(key);
+        }
+
       }
     });
   }
