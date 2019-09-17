@@ -105,6 +105,7 @@ export class Storage {
    */
   resolve(type) {
     const conf = typeof type === 'string' ? this.config.get(type) : type;
+    if (!conf) return null; // 配置不存在
 
     // 尝试取缓存数据
     let cacheData = this.state.getState(conf.type, conf.storage);
@@ -132,7 +133,7 @@ export class Storage {
    */
   cache(type, payload) {
     const conf = this.config.get(type);
-    this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage);
+    conf && this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage);
   }
 
   /**
@@ -141,7 +142,7 @@ export class Storage {
    */
   remove(type) {
     const conf = this.config.get(type);
-    this.state.removeState(conf.type, conf.storage);
+    conf && this.state.removeState(conf.type, conf.storage);
   }
 
   /**
