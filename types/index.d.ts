@@ -27,4 +27,4 @@ declare const _default:{
   StorageState:typeof StorageState
 };
 export default _default;
-export { Storage as Store, StorageType, StorageConfig, StorageState };
+export { Storage, StorageType, StorageConfig, StorageState };

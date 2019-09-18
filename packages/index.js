@@ -18,4 +18,4 @@ const _default = {
 };
 
 export default _default;
-export { install, Storage as Store, StorageType, StorageConfig, StorageState };
+export { install, Storage, StorageType, StorageConfig, StorageState };
