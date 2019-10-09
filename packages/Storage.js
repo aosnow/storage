@@ -4,7 +4,7 @@
 // created: 2019/7/30 17:47
 // ------------------------------------------------------------------------------
 
-import { now } from 'lodash-es';
+import { now, merge } from 'lodash-es';
 import { assert } from './utils';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
@@ -130,9 +130,16 @@ export class Storage {
    * 缓存数据到浏览器缓存
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
+   * @param {Boolean} [autoMerge] 是否合并到已经存在的缓存数据
    */
-  cache(type, payload) {
+  cache(type, payload, autoMerge = true) {
     const conf = this.config.get(type);
+    if (autoMerge) {
+      const cacheData = this.resolve(conf);
+      if (cacheData) {
+        payload = merge(cacheData.payload, payload);
+      }
+    }
     conf && this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage);
   }
 

@@ -14,6 +14,7 @@
       <el-form-item>
         <el-button @click="userlogin">登录</el-button>
         <el-button @click="userexit">退出</el-button>
+        <el-button @click="coverCache">重复覆盖存储缓存</el-button>
       </el-form-item>
 
       <el-form-item>
@@ -79,6 +80,11 @@ export default {
       // }).catch(reason => {
       //   console.warn(reason);
       // });
+    },
+    coverCache() {
+      const data = { a: Math.random() };
+      data[Math.random() * 100 >> 0] = 'rand key';
+      Vue.storage.cache('cover-test', data);
     },
     persistedHandler() {
       this.isRooted = !this.isRooted;
