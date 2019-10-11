@@ -28,7 +28,7 @@ class StorageConfig {
    * @return {boolean}
    */
   static needRestore(conf) {
-    return conf.restore !== false;
+    return conf.restore !== false || typeof conf.restore === 'function';
   }
 
   // --------------------------------------------------------------------------

@@ -166,11 +166,14 @@ export class Storage {
           // 自定义恢复方法 fn(cacheData,conf)
           store.call(this, cacheData, conf);
         }
+        else if (typeof conf.restore === 'function') {
+          // conf.restore 可配置成自定义恢复缓存的函数
+          conf.restore.call(this, store, cacheData, conf);
+        }
         else {
           // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
           store.dispatch(key);
         }
-
       }
     });
   }

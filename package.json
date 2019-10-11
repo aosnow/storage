@@ -1,11 +1,10 @@
 {
   "name": "@mudas/storage",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "@mudas/storage",
   "author": "mudas",
   "license": "MIT",
   "main": "dist/storage.common.js",
-  "sideEffects": false,
   "homepage": "https://github.com/aosnow/storage",
   "bugs": {
     "url": "https://github.com/aosnow/storage/issues"

@@ -4,6 +4,10 @@
 // created: 2019/8/9
 // ------------------------------------------------------------------------------
 
+import { Store } from 'vuex/types';
+
+type RestoreHandler = (store:Store<any>, cacheData:any, conf:any) => void;
+
 export interface ConfigOptions {
   // type 必须是已经定义的 mutation 名，若使用了 Module，需要指定完整包含 Module 和 type 的值，如“info/save”
   // storage 存储引擎类型：localStorage,sessionStorage（默认）,memory,cookie。推荐通过 STORAGE_TYPE 进行引用取得
@@ -12,7 +16,7 @@ export interface ConfigOptions {
   type:string;
   storage:string;
   expire?:number;
-  restore?:boolean;
+  restore?:boolean | RestoreHandler;
 }
 
 declare class StorageConfig {
