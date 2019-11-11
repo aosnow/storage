@@ -36,13 +36,13 @@ export default function(context, { type, handler, success, error, force }) {
 
   return new Promise((resolve, reject) => {
     if (cacheData && !force) {
-      console.warn('cachedata:', cacheData.payload);
+      // console.warn('cachedata:', cacheData.payload);
       success.call(this, cacheData.payload);
       resolve(cacheData.payload);
     }
     else {
       handler().then(data => {
-        console.warn('postdata:', data);
+        // console.warn('postdata:', data);
 
         // handler() resolve 了错误的值
         if (!isValidData(data)) {

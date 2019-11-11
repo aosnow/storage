@@ -62,7 +62,7 @@ const Actions = {
       // 预留日后需要同步登出到服务端
       const result = true;
       if (result) {
-        commit('setLogout');
+        commit('logout');
         resolve();
       }
       else {

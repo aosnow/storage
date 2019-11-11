@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import EasyHttp from '@mudas/http';
 import Storage from '@mudas/storage';
-// import { StorageSubscribe } from '@mudas/storage';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 

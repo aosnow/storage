@@ -5,21 +5,18 @@
 // ------------------------------------------------------------------------------
 
 const path = require('path');
-const HappyPack = require('happypack');
-const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const isDebug = process.env.NODE_ENV === 'development';
+const DEBUG = process.env.NODE_ENV === 'development';
 
 function resolve(...dir) {
   return path.join(__dirname, ...dir);
 }
 
 // 排除所有不必要的模块，让宿主环境去安排必要的第三方包
-const regexp = /^(lodash-es|core-js)/i;
-const externals = isDebug ? '' : [regexp];
+const regexp = /^(lodash-es|core-js|element-ui|axios|vue|vuex|@mudas\/http)/i;
+const externals = DEBUG ? '' : [regexp];
 
 module.exports = {
-  publicPath: isDebug ? '/' : './',
+  publicPath: DEBUG ? '/' : './',
   outputDir: 'dist',
   assetsDir: '',
   productionSourceMap: false,
@@ -45,20 +42,11 @@ module.exports = {
     // 不分割任何模块
     optimization: {
       // 开发时爱怎么分割怎么分，少做点合并包的事应该会快点吧
-      splitChunks: isDebug ? {} : false
+      splitChunks: DEBUG ? {} : false
     },
 
     // 排除外部库（如使用CDN或引用本地JS库）
-    externals,
-
-    // 插件
-    plugins: [
-      new HappyPack({
-        id: 'happyBabel',
-        loaders: [{ loader: 'babel-loader?cacheDirectory=true' }],
-        threadPool: happyThreadPool
-      })
-    ]
+    externals
   },
 
   chainWebpack: (config) => {
@@ -74,7 +62,7 @@ module.exports = {
     config.resolve.alias.set('@mudas/storage', resolve('packages'));
 
     // 不生成 html
-    if (!isDebug) {
+    if (!DEBUG) {
       config.plugins.delete('html');
       config.plugins.delete('preload');
       config.plugins.delete('prefetch');

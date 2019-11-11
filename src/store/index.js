@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-// import Info from './info';
 import User from './user';
 
 Vue.use(Vuex);

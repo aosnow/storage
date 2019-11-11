@@ -1,6 +1,6 @@
 {
   "name": "@mudas/storage",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "@mudas/storage",
   "author": "mudas",
   "license": "MIT",
@@ -13,49 +13,55 @@
     "type": "git",
     "url": "https://github.com/aosnow/storage"
   },
-  "keywords": ["storage"],
+  "keywords": [
+    "storage"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name storage packages/index.js",
     "report": "vue-cli-service build --target lib --name file packages/index.js --report",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "pub": "npm run build && npm publish --access=public"
   },
   "typings": "types/index.d.ts",
   "files": [
     "dist",
     "types",
+    "packages",
     "package.json",
     "README.md"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@mudas/http": "0.0.19",
+    "axios": "^0.19.0",
+    "core-js": "^3.3.6",
+    "element-ui": "^2.12.0",
+    "lodash-es": "^4.17.15",
+    "js-cookie": "^2.2.0",
+    "vue": "^2.6.10",
+    "vuex": "^3.1.1"
+  },
   "peerDependencies": {
-    "core-js": "^2.6.5",
-    "lodash-es": "^4.17.15"
+    "axios": ">=0.19.0",
+    "core-js": ">=3.3.6",
+    "element-ui": ">=2.12.0",
+    "lodash-es": ">=4.17.15",
+    "js-cookie": "^2.2.0"
   },
   "devDependencies": {
-    "@mudas/http": "0.0.12",
-    "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-plugin-unit-jest": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
-    "@vue/eslint-config-airbnb": "^4.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "axios": "^0.19.0",
-    "babel-core": "7.0.0-bridge.0",
+    "@vue/cli-plugin-babel": "^4.0.5",
+    "@vue/cli-plugin-eslint": "^4.0.5",
+    "@vue/cli-plugin-unit-jest": "^4.0.5",
+    "@vue/cli-service": "^4.0.5",
+    "@vue/eslint-config-airbnb": "^4.0.1",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
-    "babel-minify-webpack-plugin": "^0.3.1",
-    "core-js": "^2.6.5",
-    "element-ui": "^2.9.2",
+    "conventional-changelog-cli": "^2.0.27",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "happypack": "^5.0.1",
-    "js-cookie": "^2.2.0",
-    "lodash-es": "^4.17.15",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10",
-    "vuex": "^3.1.1"
+    "vue-template-compiler": "^2.6.10"
   }
 }

@@ -9,11 +9,13 @@ import Storage, { StorageOptions } from './Storage';
 import StorageType from './StorageType';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
+import { EasyHttpInstance } from '@mudas/http/types/EasyHttp';
 
 // 扩展 Vue 静态属性，若是实例属性直接扩展 interface Vue 即可
 declare module 'vue/types/vue' {
   interface VueConstructor {
     storage:Storage;
+    http:EasyHttpInstance;
   }
 }
 
