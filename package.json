@@ -18,14 +18,18 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name storage packages/index.js",
-    "report": "vue-cli-service build --target lib --name file packages/index.js --report",
+    "build": "vue-cli-service scripts --target lib --name storage packages/index.js",
+    "report": "vue-cli-service scripts --target lib --name storage packages/index.js --report",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "log": "bash scripts/changelog.sh",
+    "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
     "pub": "npm run build && npm publish --access=public"
   },
   "typings": "types/index.d.ts",
+  "gitHooks": {
+    "commit-msg": "node scripts/verifyCommitMsg.js"
+  },
   "files": [
     "dist",
     "types",
@@ -59,6 +63,7 @@
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "chalk": "^3.0.0",
     "conventional-changelog-cli": "^2.0.27",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
