@@ -50,7 +50,7 @@ declare class Storage {
    * @param {*} payload 需要被缓存的数据
    * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
    */
-  cache(type:string, payload:any, autoMerge:boolean):void;
+  cache(type:string, payload:any, autoMerge?:boolean):void;
 
   /**
    * 移除指定 type 对应的缓存数据

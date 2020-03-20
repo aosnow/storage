@@ -1,4 +1,3 @@
-const chalk = require('chalk');  // eslint-disable-line
 const msgPath = process.env.GIT_PARAMS;
 const msg = require('fs').readFileSync(msgPath, 'utf-8').trim();
 
@@ -28,23 +27,23 @@ const COMMIT_REG = /^(v\d+\.\d+\.\d+(-(alpha|beta|rc.\d+))?$)|((revert:\s*)?(fea
 if (!COMMIT_REG.test(msg)) {
   console.log();
   console.error(
-    `  ${chalk.red.bold('ERROR ')} ${chalk.red(`invalid commit message format.`)}\n` +
-    chalk.red(`  Proper commit message format is required for automated changelog generation. \n\n`) +
-    chalk.blue(`  Examples:\n`) +
-    `    ${chalk.green(`feat(compiler): add 'comments' option`)}\n` +
-    `    ${chalk.green(`fix(v-model): handle events on blur (close #28)`)}\n\n` +
-    chalk.blue(`  The available formats are as follows:\n`) +
-    `    ${chalk.green(`feat:     A new feature`)}\n` +
-    `    ${chalk.green(`fix:      A bug fix`)}\n` +
-    `    ${chalk.green(`docs:     Documentation only changes`)}\n` +
-    `    ${chalk.green(`style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)`)}\n` +
-    `    ${chalk.green(`refactor: A code change that neither fixes a bug nor adds a feature`)}\n` +
-    `    ${chalk.green(`perf:     A code change that improves performance`)}\n` +
-    `    ${chalk.green(`test:     Adding missing tests or correcting existing tests`)}\n` +
-    `    ${chalk.green(`build:    Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)`)}\n` +
-    `    ${chalk.green(`ci:       Changes to our CI configuration files and scripts (example scopes: Trav is, Circle, BrowserStack, SauceLabs)`)}\n` +
-    `    ${chalk.green(`chore:    Other changes that don't modify src or test files`)}\n` +
-    `    ${chalk.green(`revert:   Reverts a previous commit`)}\n`
+    `  ERROR invalid commit message format.\n` +
+    `  Proper commit message format is required for automated changelog generation. \n\n` +
+    `  Examples:\n` +
+    `    feat(compiler): add 'comments' option\n` +
+    `    fix(v-model): handle events on blur (close #28)\n\n` +
+    `  The available formats are as follows:\n` +
+    `    feat:     A new feature\n` +
+    `    fix:      A bug fix\n` +
+    `    docs:     Documentation only changes\n` +
+    `    style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)\n` +
+    `    refactor: A code change that neither fixes a bug nor adds a feature\n` +
+    `    perf:     A code change that improves performance\n` +
+    `    test:     Adding missing tests or correcting existing tests\n` +
+    `    build:    Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)\n` +
+    `    ci:       Changes to our CI configuration files and scripts (example scopes: Trav is, Circle, BrowserStack, SauceLabs)\n` +
+    `    chore:    Other changes that don't modify src or test files\n` +
+    `    revert:   Reverts a previous commit\n`
   );
   process.exit(1);
 }

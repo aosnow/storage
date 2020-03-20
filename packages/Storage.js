@@ -4,7 +4,8 @@
 // created: 2019/7/30 17:47
 // ------------------------------------------------------------------------------
 
-import { now, merge } from 'lodash-es';
+import now from 'lodash.now';
+import merge from 'lodash.merge';
 import { assert } from './utils';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
@@ -161,7 +162,7 @@ export class Storage {
       // 只对已经存在缓存数据的配置进行
       const cacheData = this.resolve(conf);
 
-      console.warn('restore:', key, conf);
+      // console.warn('restore:', key, conf);
       if (cacheData) {
         if (typeof store === 'function') {
           // 【主动调用】自定义恢复方法 fn(cacheData,conf)

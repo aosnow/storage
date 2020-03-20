@@ -85,7 +85,7 @@ module.exports = {
       'asyncArrow': 'always'
     }],
     // 是否允许使用 console 语句
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': 'off',
     // 箭头函数的函数体样式：是否需要｛｝包含
     'arrow-body-style': 'off',
     // 箭头函数的参数表是否需要括号包起来

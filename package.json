@@ -1,6 +1,6 @@
 {
   "name": "@mudas/storage",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "description": "@mudas/storage",
   "author": "mudas",
   "license": "MIT",
@@ -18,8 +18,8 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service scripts --target lib --name storage packages/index.js",
-    "report": "vue-cli-service scripts --target lib --name storage packages/index.js --report",
+    "build": "vue-cli-service build --target lib --name storage packages/index.js",
+    "report": "vue-cli-service build --target lib --name storage packages/index.js --report",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "pub": "npm run build && npm publish --access=public"
@@ -36,21 +36,16 @@
     "README.md"
   ],
   "dependencies": {
-    "@mudas/http": "0.0.19",
+    "@mudas/http": "0.0.24",
     "axios": "^0.19.0",
-    "core-js": "^3.3.6",
-    "element-ui": "^2.12.0",
-    "lodash-es": "^4.17.15",
+    "core-js": "^3.6.4",
     "js-cookie": "^2.2.0",
-    "vue": "^2.6.10",
-    "vuex": "^3.1.1"
-  },
-  "peerDependencies": {
-    "axios": ">=0.19.0",
-    "core-js": ">=3.3.6",
-    "element-ui": ">=2.12.0",
-    "lodash-es": ">=4.17.15",
-    "js-cookie": "^2.2.0"
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.isfunction": "^3.0.9",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.isstring": "^4.0.1",
+    "lodash.merge": "^4.6.2",
+    "lodash.now": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.5",
@@ -59,11 +54,12 @@
     "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-airbnb": "^4.0.1",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "chalk": "^3.0.0",
+    "babel-eslint": "^10.0.3",
+    "element-ui": "^2.12.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "vue": "^2.6.10",
+    "vuex": "^3.1.1",
     "vue-template-compiler": "^2.6.10"
   }
 }

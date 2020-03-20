@@ -12,7 +12,7 @@ function resolve(...dir) {
 }
 
 // 排除所有不必要的模块，让宿主环境去安排必要的第三方包
-const regexp = /^(lodash-es|core-js|element-ui|axios|vue|vuex|@mudas\/http)/i;
+const regexp = /^(lodash|core-js|element-ui|axios|vue|vuex|@mudas\/http)/i;
 const externals = DEBUG ? '' : [regexp];
 
 module.exports = {
@@ -41,6 +41,8 @@ module.exports = {
 
     // 不分割任何模块
     optimization: {
+      minimize: !DEBUG,
+
       // 开发时爱怎么分割怎么分，少做点合并包的事应该会快点吧
       splitChunks: DEBUG ? {} : false
     },

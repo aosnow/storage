@@ -4,7 +4,9 @@
 // created: 2019.08.05 上午 0:22
 // ------------------------------------------------------------------------------
 
-import { isFunction, isPlainObject, isString } from 'lodash-es';
+import isFunction from 'lodash.isfunction';
+import isPlainObject from 'lodash.isplainobject';
+import isString from 'lodash.isstring';
 
 function isValidData(data) {
   return isPlainObject(data) || Array.isArray(data) || isString(data);
