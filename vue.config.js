@@ -5,9 +5,6 @@
 // ------------------------------------------------------------------------------
 
 const path = require('path');
-const HappyPack = require('happypack');
-const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const isDebug = process.env.NODE_ENV === 'development';
 
 function resolve(...dir) {
@@ -38,6 +35,12 @@ module.exports = {
     }
   },
 
+  // 默认情况下 babel-loader 会忽略所有 node_modules 中的文件
+  // 此处列出 node_modules 中同样需要让 babel 转译的 esm 模块
+  transpileDependencies: [
+    '@mudas/*'
+  ],
+
   configureWebpack: {
 
     entry: resolve('src/main.js'),
@@ -49,17 +52,9 @@ module.exports = {
     },
 
     // 排除外部库（如使用CDN或引用本地JS库）
-    externals,
-
-    // 插件
-    plugins: [
-      new HappyPack({
-        id: 'happyBabel',
-        loaders: [{ loader: 'babel-loader?cacheDirectory=true' }],
-        threadPool: happyThreadPool
-      })
-    ]
+    externals
   },
+
 
   chainWebpack: (config) => {
 
@@ -72,13 +67,6 @@ module.exports = {
     // 路径别名
     config.resolve.alias.set('@', resolve('src'));
     config.resolve.alias.set('@mudas/storage', resolve('packages'));
-
-    // 不生成 html
-    if (!isDebug) {
-      config.plugins.delete('html');
-      config.plugins.delete('preload');
-      config.plugins.delete('prefetch');
-    }
 
   }
 };

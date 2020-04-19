@@ -11,11 +11,8 @@ import StorageState from './StorageState';
 
 const _default = {
   install,
-  Store: Storage,
-  StorageType,
-  StorageConfig,
-  StorageState
+  Store: Storage
 };
 
 export default _default;
-export { install, Storage, StorageType, StorageConfig, StorageState };
+export { Storage as Store, StorageType, StorageConfig, StorageState };

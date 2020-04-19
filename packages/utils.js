@@ -5,5 +5,5 @@
 // ------------------------------------------------------------------------------
 
 export function assert(condition, msg) {
-  if (!condition) throw new Error(`[vuex] ${msg}`);
+  if (!condition) throw new Error(`[@mudas/storage] ${msg}`);
 }

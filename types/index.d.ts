@@ -21,10 +21,7 @@ export declare function install(Vue:typeof _Vue, options?:StorageOptions):void;
 
 declare const _default:{
   install:typeof install,
-  Store:typeof Storage,
-  StorageType:typeof StorageType,
-  StorageConfig:typeof StorageConfig,
-  StorageState:typeof StorageState
+  Store:typeof Storage
 };
 export default _default;
 export { Storage, StorageType, StorageConfig, StorageState };
