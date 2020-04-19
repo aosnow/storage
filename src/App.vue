@@ -14,6 +14,8 @@
       <el-form-item>
         <el-button @click="userlogin">登录</el-button>
         <el-button @click="userexit">退出</el-button>
+        <el-button @click="coverCache">重复覆盖存储缓存</el-button>
+        <el-button @click="removeCoverCache">删除覆盖存储缓存</el-button>
       </el-form-item>
 
       <el-form-item>
@@ -21,9 +23,9 @@
       </el-form-item>
     </el-form>
 
-    <el-button @click="userexit">退出</el-button>
-    <el-button @click="handler">点击请求新的数据</el-button>
-    <el-button @click="persistedHandler">PersistedState[ {{isRooted}} ]</el-button>
+    <!--<el-button @click="userexit">退出</el-button>-->
+    <!--<el-button @click="handler">点击请求新的数据</el-button>-->
+    <!--<el-button @click="persistedHandler">PersistedState[ {{isRooted}} ]</el-button>-->
     <!--<pre class="dataset">{{dataset}}</pre>-->
 
   </div>
@@ -71,7 +73,9 @@ export default {
       });
     },
     userexit() {
-      this.logout();
+      this.logout().then(() => {
+        Vue.storage.remove('user/login');
+      });
     },
     handler() {
       // this.$store.dispatch('info/fetch').then(data => {
@@ -80,6 +84,16 @@ export default {
       //   console.warn(reason);
       // });
     },
+    coverCache() {
+      const data = { a: Math.random() };
+      data[Math.random() * 100 >> 0] = 'rand key';
+      Vue.storage.cache('cover-test', data);
+    },
+
+    removeCoverCache() {
+      Vue.storage.remove('cover-test');
+    },
+
     persistedHandler() {
       this.isRooted = !this.isRooted;
       // setUnique(this.isRooted ? 'root' : 'a$b%cc@42a');

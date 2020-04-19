@@ -4,7 +4,9 @@
 // created: 2019.08.05 上午 0:22
 // ------------------------------------------------------------------------------
 
-import { isFunction, isPlainObject, isString } from 'lodash-es';
+import isFunction from 'lodash.isfunction';
+import isPlainObject from 'lodash.isplainobject';
+import isString from 'lodash.isstring';
 
 function isValidData(data) {
   return isPlainObject(data) || Array.isArray(data) || isString(data);
@@ -36,13 +38,13 @@ export default function(context, { type, handler, success, error, force }) {
 
   return new Promise((resolve, reject) => {
     if (cacheData && !force) {
-      console.warn('cachedata:', cacheData.payload);
+      // console.warn('cachedata:', cacheData.payload);
       success.call(this, cacheData.payload);
       resolve(cacheData.payload);
     }
     else {
       handler().then(data => {
-        console.warn('postdata:', data);
+        // console.warn('postdata:', data);
 
         // handler() resolve 了错误的值
         if (!isValidData(data)) {

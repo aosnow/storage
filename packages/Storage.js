@@ -4,7 +4,8 @@
 // created: 2019/7/30 17:47
 // ------------------------------------------------------------------------------
 
-import { now } from 'lodash-es';
+import now from 'lodash.now';
+import merge from 'lodash.merge';
 import { assert } from './utils';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
@@ -130,9 +131,16 @@ export class Storage {
    * 缓存数据到浏览器缓存
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
+   * @param {Boolean} [autoMerge] 是否合并到已经存在的缓存数据
    */
-  cache(type, payload) {
+  cache(type, payload, autoMerge = true) {
     const conf = this.config.get(type);
+    if (autoMerge) {
+      const cacheData = this.resolve(conf);
+      if (cacheData) {
+        payload = merge(cacheData.payload, payload);
+      }
+    }
     conf && this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage);
   }
 
@@ -154,16 +162,24 @@ export class Storage {
       // 只对已经存在缓存数据的配置进行
       const cacheData = this.resolve(conf);
 
-      if (cacheData && StorageConfig.needRestore(conf)) {
+      // console.warn('restore:', key, conf);
+      if (cacheData) {
         if (typeof store === 'function') {
-          // 自定义恢复方法 fn(cacheData,conf)
+          // 【主动调用】自定义恢复方法 fn(cacheData,conf)
           store.call(this, cacheData, conf);
         }
+        else if (conf.restore !== true && conf.restore !== undefined) {
+          // 【配置参数】conf.restore 可配置成自定义恢复缓存的函数
+          if (typeof conf.restore === 'function') {
+            conf.restore.call(this, store, cacheData, conf);
+          }
+          // 若 conf.restore = false 则忽略不进行缓存恢复操作
+        }
         else {
+          // 未传入自定义恢复方法和配置项目中的自定义方法则默认调用 dispatch(actionName) 来间接恢复缓存到 vuex
           // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
           store.dispatch(key);
         }
-
       }
     });
   }

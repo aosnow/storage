@@ -4,7 +4,7 @@
 // created: 2019/8/6 20:11
 // ------------------------------------------------------------------------------
 
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash.clonedeep';
 import { embedAction } from './plugin/wrapper';
 
 let _Vue;

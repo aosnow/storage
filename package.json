@@ -1,6 +1,6 @@
 {
   "name": "@mudas/storage",
-  "version": "0.0.14",
+  "version": "0.0.20",
   "description": "@mudas/storage",
   "author": "mudas",
   "license": "MIT",
@@ -26,9 +26,13 @@
     "pub": "npm run build && npm publish --access=public"
   },
   "typings": "types/index.d.ts",
+  "gitHooks": {
+    "commit-msg": "node scripts/verifyCommitMsg.js"
+  },
   "files": [
     "dist",
     "types",
+    "packages",
     "package.json",
     "README.md"
   ],

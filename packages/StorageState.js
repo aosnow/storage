@@ -4,7 +4,7 @@
 // created: 2019/7/30 17:57
 // ------------------------------------------------------------------------------
 
-import { merge } from 'lodash-es';
+import merge from 'lodash.merge';
 import StorageType from './StorageType';
 import LocalStorage from './engines/local';
 import SessionStorage from './engines/session';
