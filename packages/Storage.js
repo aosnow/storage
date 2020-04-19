@@ -4,8 +4,7 @@
 // created: 2019/7/30 17:47
 // ------------------------------------------------------------------------------
 
-import now from 'lodash.now';
-import merge from 'lodash.merge';
+import { now, merge } from 'lodash-es';
 import { assert } from './utils';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';

@@ -11,7 +11,7 @@ install:
 npm i @mudas/storage core-js lodash-es -S
 ```
 
-starting with v0.0.14, esm is supported. You need to add configuration for vue-cli to correctly translate the es module in node_modules:
+starting with v0.0.20, esm is supported. You need to add configuration for vue-cli to correctly translate the es module in node_modules:
 ```js
 // vue.config.js:
 module.exports = {
