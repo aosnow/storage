@@ -119,12 +119,13 @@ class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {Object} state 需要存储的状态数据
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {*|void}
    */
-  setState(key, state, storageType = StorageType.sessionStorage) {
+  setState(key, state, storageType = StorageType.sessionStorage, options = null) {
     const s = this._storage(storageType);
     const k = this.genKey(key);
-    return s.setItem(k, state);
+    return s.setItem(k, state, options);
   }
 
   /**
@@ -132,12 +133,13 @@ class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
    * @param {Object} [value] 缺省值。前者无值时的替代方案
+   * @param {Object} [options=null] 额外参数
    * @returns {*}
    */
-  getState(key, storageType, value = null) {
+  getState(key, storageType, options = null, value = null) {
     const s = this._storage(storageType);
     const k = this.genKey(key);
-    const r = s.getItem(k);
+    const r = s.getItem(k, options);
     return r ? r : value;
   }
 
@@ -145,12 +147,13 @@ class StorageState {
    * 移除指定状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {void}
    */
-  removeState(key, storageType) {
+  removeState(key, storageType, options = null) {
     const s = this._storage(storageType);
     const k = this.genKey(key);
-    s.removeItem(k);
+    s.removeItem(k, options);
   }
 
   /**

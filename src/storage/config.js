@@ -8,5 +8,5 @@ import { StorageType } from '@mudas/storage';
 
 export default [
   { type: 'user/login', storage: StorageType.localStorage, expire: 1800 },
-  { type: 'cover-test', storage: StorageType.localStorage, expire: 1800, restore: false }
+  { type: 'cover-test', storage: StorageType.cookie, expire: 1800, restore: false, cookie: { path: '/' } }
 ];

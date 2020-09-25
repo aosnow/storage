@@ -41,7 +41,7 @@ class StorageConfig {
   /**
    * 获取指定的 type 对应配置信息
    * @param {String} type
-   * @returns {{type:String, storage:String, expire:Number}}
+   * @returns {ConfigOptions}
    */
   get(type) {
     return this._map[type];
@@ -49,7 +49,7 @@ class StorageConfig {
 
   /**
    * 通过 add() 方法进行批量注册
-   * @param {Array<{ type, storage?, expire? }>} confs 配置集合
+   * @param {Array<ConfigOptions>} confs 配置集合
    */
   batch(confs) {
     if (Array.isArray(confs)) {

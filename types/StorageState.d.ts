@@ -46,26 +46,29 @@ declare class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {Object} state 需要存储的状态数据
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {*|void}
    */
-  setState(key:string, state:any, storageType:string):void;
+  setState(key:string, state:any, storageType:string, options?:object):void;
 
   /**
    * 取出状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
    * @param {Object} [value] 缺省值。前者无值时的替代方案
+   * @param {Object} [options=null] 额外参数
    * @returns {*}
    */
-  getState(key:string, storageType:string, value?:any):any;
+  getState(key:string, storageType:string, options?:object, value?:any):any;
 
   /**
    * 移除指定状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {void}
    */
-  removeState(key:string, storageType:string);
+  removeState(key:string, storageType:string, options?:object);
 
   /**
    * 经过处理后的 key

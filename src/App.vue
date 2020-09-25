@@ -14,12 +14,24 @@
       <el-form-item>
         <el-button @click="userlogin">登录</el-button>
         <el-button @click="userexit">退出</el-button>
-        <el-button @click="coverCache">重复覆盖存储缓存</el-button>
+      </el-form-item>
+
+      <el-form-item label="cover-test">
+        <el-button @click="coverCache">重复覆盖存储（path: /）</el-button>
         <el-button @click="removeCoverCache">删除覆盖存储缓存</el-button>
+        <el-button @click="getCache">取值</el-button>
+        <div>{{cacheData}}</div>
+      </el-form-item>
+
+      <el-form-item label="cover-test2">
+        <el-button @click="coverCache2">重复覆盖存储（path: /index）</el-button>
+        <el-button @click="removeCoverCache2">删除覆盖存储缓存</el-button>
+        <el-button @click="getCache2">取值</el-button>
+        <div>{{cacheData2}}</div>
       </el-form-item>
 
       <el-form-item>
-        {{loginfo}}
+        {{ loginfo }}
       </el-form-item>
     </el-form>
 
@@ -43,8 +55,10 @@ export default {
     return {
       key: '',
       value: '',
-      cookies: null,
-      isRooted: true,
+
+      cacheData: null,
+      cacheData2: null,
+
       username: 'huhuan',
       password: '123456'
     };
@@ -54,10 +68,6 @@ export default {
     loginfo() {
       return this.$store.getters['user/loginfo'];
     }
-  },
-
-  created() {
-    console.warn(Vue.storage);
   },
 
   methods: {
@@ -77,13 +87,7 @@ export default {
         Vue.storage.remove('user/login');
       });
     },
-    handler() {
-      // this.$store.dispatch('info/fetch').then(data => {
-      //   console.warn(data.data);
-      // }).catch(reason => {
-      //   console.warn(reason);
-      // });
-    },
+
     coverCache() {
       const data = { a: Math.random() };
       data[Math.random() * 100 >> 0] = 'rand key';
@@ -94,10 +98,24 @@ export default {
       Vue.storage.remove('cover-test');
     },
 
-    persistedHandler() {
-      this.isRooted = !this.isRooted;
-      // setUnique(this.isRooted ? 'root' : 'a$b%cc@42a');
+    coverCache2() {
+      const data = { a: Math.random() };
+      data[Math.random() * 100 >> 0] = 'rand key2';
+      Vue.storage.cache('cover-test', data, { cookie: { path: '/index' } });
+    },
+
+    removeCoverCache2() {
+      Vue.storage.remove('cover-test', { cookie: { path: '/index' } });
+    },
+
+    getCache() {
+      this.cacheData = Vue.storage.resolve('cover-test', { cookie: { path: '/' } });
+    },
+
+    getCache2() {
+      this.cacheData2 = Vue.storage.resolve('cover-test', { cookie: { path: '/index' } });
     }
+
   }
 };
 </script>

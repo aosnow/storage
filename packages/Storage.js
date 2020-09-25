@@ -100,15 +100,16 @@ export class Storage {
 
   /**
    * 分析获取缓存数据
-   * @param {String|Object} type
+   * @param {String|ConfigOptions} type
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    * @return {*}
    */
-  resolve(type) {
-    const conf = typeof type === 'string' ? this.config.get(type) : type;
+  resolve(type, options = null) {
+    const conf = { ...(typeof type === 'string' ? this.config.get(type) : type), ...options };
     if (!conf) return null; // 配置不存在
 
     // 尝试取缓存数据
-    let cacheData = this.state.getState(conf.type, conf.storage);
+    let cacheData = this.state.getState(conf.type, conf.storage, conf[conf.storage]);
 
     // 检测数据缓存是否过期
     // 如果之前存放数据时设置了时间戳，且配置了过期时间，则检测过期逻辑
@@ -130,26 +131,30 @@ export class Storage {
    * 缓存数据到浏览器缓存
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
-   * @param {Boolean} [autoMerge] 是否合并到已经存在的缓存数据
+   * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  cache(type, payload, autoMerge = true) {
-    const conf = this.config.get(type);
+  cache(type, payload, options = null, autoMerge = true) {
+    const conf = merge({}, this.config.get(type), options);
+
     if (autoMerge) {
       const cacheData = this.resolve(conf);
       if (cacheData) {
         payload = merge(cacheData.payload, payload);
       }
     }
-    conf && this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage);
+
+    this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage, conf[conf.storage]);
   }
 
   /**
    * 移除指定 type 对应的缓存数据
    * @param type
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  remove(type) {
-    const conf = this.config.get(type);
-    conf && this.state.removeState(conf.type, conf.storage);
+  remove(type, options = null) {
+    const conf = merge({}, this.config.get(type), options);
+    conf && this.state.removeState(conf.type, conf.storage, conf[conf.storage]);
   }
 
   /**

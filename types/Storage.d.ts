@@ -14,6 +14,10 @@ export declare interface StorageOptions {
   config?:Array<ConfigOptions>
 }
 
+export declare interface CacheMethodOptions {
+  [index:string]:any;
+}
+
 type RestoreHandler = (cacheData:any, conf:any) => void;
 
 declare class Storage {
@@ -49,14 +53,16 @@ declare class Storage {
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
    * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  cache(type:string, payload:any, autoMerge?:boolean):void;
+  cache(type:string, payload:any, options?:CacheMethodOptions, autoMerge?:boolean):void;
 
   /**
    * 移除指定 type 对应的缓存数据
    * @param type
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  remove(type:string):void;
+  remove(type:string, options?:CacheMethodOptions):void;
 
   /**
    * 将已经缓存的数据恢复到 state 中

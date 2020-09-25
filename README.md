@@ -1,6 +1,6 @@
 # @mudas/storage
 
-> 这是一个同时支持 sessionStorage、localStorage、cook、map 存储数据的工具库  
+> 这是一个同时支持 sessionStorage、localStorage、cookie、map 存储数据的工具库
 This is a tool library that supports session Storage, local Storage, cookie, map to store data.
 
 ![image](https://raw.githubusercontent.com/aosnow/assets/master/img/storage.png)
@@ -8,7 +8,7 @@ This is a tool library that supports session Storage, local Storage, cookie, map
 ## Setup
 install:
 ```npm
-npm i @mudas/storage core-js lodash-es -S
+npm i @mudas/storage
 ```
 
 starting with v0.0.20, esm is supported. You need to add configuration for vue-cli to correctly translate the es module in node_modules:
@@ -97,7 +97,7 @@ Automatically complete the integration with Vuex.Store, contain the following fe
 
 ### options.unique：
 - #### type: String
-Unique code, if specified,`'key'`will become`'key@[unique]'`  
+Unique code, if specified,`'key'`will become`'key@[unique]'`
 Domain space cannot be distinguished when debugging locally. This parameter can solve the problem of data confusion when multiple websites are debugging at 127.0.0.1.
 
 ### options.state：
@@ -106,7 +106,7 @@ This parameter is used to override the default global cache configuration：
 ```
 // default
 {
-  expire: 0, 
+  expire: 0,
   storage: StorageType.sessionStorage // default storage engine
 }
 ```
@@ -135,6 +135,20 @@ cache rule.
     the number of seconds that are timed out, 0 means never timed out.
   - ##### restore: Boolean（`default: true`）
     whether application initialization automatically restores caching
+  - ##### cookie: Object
+    ```typescript
+    // Define when the cookie will be removed. Value can be a Number which will be interpreted as days from time of creation or a Date instance. If omitted, the cookie becomes a session cookie.
+    expires?:number | Date;
+
+    // A String indicating the path where the cookie is visible.
+    path?:string;
+
+    // A String indicating a valid domain where the cookie should be visible. The cookie will also be visible to all subdomains.
+    domain?:string;
+
+    // Either true or false, indicating if the cookie transmission requires a secure protocol (https).
+    secure?:boolean;
+    ```
 
 ### Storage
 ```typescript
@@ -177,14 +191,16 @@ declare class Storage {
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
    * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  cache(type:string, payload:any, autoMerge:boolean):void;
+  cache(type:string, payload:any, options?:CacheMethodOptions, autoMerge?:boolean):void;
 
   /**
    * 移除指定 type 对应的缓存数据
    * @param type
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  remove(type:string):void;
+  remove(type:string, options?:CacheMethodOptions):void;
 
   /**
    * 将已经缓存的数据恢复到 state 中
@@ -193,15 +209,38 @@ declare class Storage {
   restore(type:string):void;
 }
 
-interface ConfigOptions {
+/**
+ * 配置参数
+ */
+export interface ConfigOptions {
+
   // type 必须是已经定义的 mutation 名，若使用了 Module，需要指定完整包含 Module 和 type 的值，如“info/save”
-  // storage 存储引擎类型：localStorage,sessionStorage（默认）,memory,cookie。推荐通过 STORAGE_TYPE 进行引用取得
-  // expire 数据保持的时间，单位秒，过期后将重新请求新数据（默认：0，即不过期或随生命周期）
-  // restore 控制在页面刷新重新进入应用时是否需要恢复缓存，若不在初始化时恢复缓存，则在主动发起第一次请求时才被恢复到 state。
   type:string;
+
+  // storage 存储引擎类型：localStorage,sessionStorage（默认）,memory,cookie。推荐通过 STORAGE_TYPE 进行引用取得
   storage:string;
+
+  // expire 数据保持的时间，单位秒，过期后将重新请求新数据（默认：0，即不过期或随生命周期）
   expire?:number;
-  restore?:boolean;
+
+  // restore 控制在页面刷新重新进入应用时是否需要恢复缓存，若不在初始化时恢复缓存，则在主动发起第一次请求时才被恢复到 state。
+  restore?:boolean | RestoreHandler;
+
+  // 当存储引擎（StorageType.cookie）为 cookie 时的配置参数，其它类型引擎忽略此参数
+  cookie?:{
+    // cookie 过期时间，默认会话结束时删除。
+    // 当为 number 类型值时，代表多少天过期；当为 Date 实例时代表指定时间过期
+    expires?:number | Date;
+
+    // 存储路径
+    path?:string;
+
+    // 存储域名
+    domain?:string;
+
+    // 是否使用 https 协议
+    secure?:boolean;
+  }
 }
 
 declare class StorageConfig {
@@ -297,26 +336,29 @@ declare class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {Object} state 需要存储的状态数据
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {*|void}
    */
-  setState(key:string, state:any, storageType:string):void;
+  setState(key:string, state:any, storageType:string, options?:object):void;
 
   /**
    * 取出状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
    * @param {Object} [value] 缺省值。前者无值时的替代方案
+   * @param {Object} [options=null] 额外参数
    * @returns {*}
    */
-  getState(key:string, storageType:string, value?:any):any;
+  getState(key:string, storageType:string, options?:object, value?:any):any;
 
   /**
    * 移除指定状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
+   * @param {Object} [options=null] 额外参数
    * @returns {void}
    */
-  removeState(key:string, storageType:string);
+  removeState(key:string, storageType:string, options?:object);
 
   /**
    * 经过处理后的 key
