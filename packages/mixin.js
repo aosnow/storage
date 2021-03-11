@@ -4,7 +4,7 @@
 // created: 2019/8/6 20:11
 // ------------------------------------------------------------------------------
 
-import { cloneDeep } from 'lodash-es';
+import { merge } from '@mudas/util';
 import { embedAction } from './plugin/wrapper';
 
 let _Vue;
@@ -25,7 +25,7 @@ function storageInit() {
     store._storage = storage;
 
     // 植入 interceptorAction
-    const rawModule = cloneDeep(store._modules.root._rawModule);
+    const rawModule = merge({}, store._modules.root._rawModule);
     embedAction.call(store, rawModule);
     store.hotUpdate(rawModule);
 

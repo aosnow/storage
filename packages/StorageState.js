@@ -4,7 +4,7 @@
 // created: 2019/7/30 17:57
 // ------------------------------------------------------------------------------
 
-import { merge } from 'lodash-es';
+import { merge } from '@mudas/util';
 import StorageType from './StorageType';
 import LocalStorage from './engines/local';
 import SessionStorage from './engines/session';
@@ -18,7 +18,7 @@ class StorageState {
    * @param {{expire:Number, storage:String}|null} [options] 全局配置，可通过私有配置进行覆盖
    */
   constructor(options = null) {
-    this._options = merge(StorageState.DefaultOptions, options);
+    this._options = merge({}, StorageState.DefaultOptions, options);
   }
 
   // --------------------------------------------------------------------------

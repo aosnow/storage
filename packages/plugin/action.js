@@ -4,10 +4,10 @@
 // created: 2019.08.05 上午 0:22
 // ------------------------------------------------------------------------------
 
-import { isFunction, isPlainObject, isString } from 'lodash-es';
+import { isFunction, isPlainObject, isString, isArray } from '@mudas/util';
 
 function isValidData(data) {
-  return isPlainObject(data) || Array.isArray(data) || isString(data);
+  return isPlainObject(data) || isArray(data) || isString(data);
 }
 
 function decidedError(reason, error, reject) {

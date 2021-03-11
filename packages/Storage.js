@@ -4,10 +4,11 @@
 // created: 2019/7/30 17:47
 // ------------------------------------------------------------------------------
 
-import { now, merge } from 'lodash-es';
+import { merge, isFunction, isNumber, isNil } from '@mudas/util';
 import { assert } from './utils';
 import StorageConfig from './StorageConfig';
 import StorageState from './StorageState';
+import StorageType from './StorageType';
 import InitMixin from './mixin';
 
 let Vue; // bind on install
@@ -85,7 +86,7 @@ export class Storage {
    * @returns {boolean}
    */
   static expired(timestamp, expire) {
-    const curTimestamp = now() * 0.001;// 转换成秒
+    const curTimestamp = Date.now() * 0.001;// 转换成秒
     return curTimestamp - timestamp > expire;
   }
 
@@ -136,6 +137,18 @@ export class Storage {
    */
   cache(type, payload, options = null, autoMerge = true) {
     const conf = merge({}, this.config.get(type), options);
+    const stateOption = merge({}, conf[conf.storage]);
+
+    if (conf.storage === StorageType.cookie) {
+      // cookie 过期时间处理
+      // 优先使用用户直接定义的 options.cookie.expires，若未设置则使用 conf.expire （秒数）
+      // 若两者皆未设置，直接过期时间为 session 会话直到结束期间
+      if (isNil(stateOption.expires)) {
+        stateOption.expires = isNumber(conf.expire) && conf.expire > 0
+                              ? new Date(Date.now() + conf.expire * 1000)
+                              : '';
+      }
+    }
 
     if (autoMerge) {
       const cacheData = this.resolve(conf);
@@ -144,7 +157,7 @@ export class Storage {
       }
     }
 
-    this.state.setState(conf.type, { payload, timestamp: now() * 0.001 }, conf.storage, conf[conf.storage]);
+    this.state.setState(conf.type, { payload, timestamp: Date.now() * 0.001 }, conf.storage, stateOption);
   }
 
   /**
@@ -168,13 +181,13 @@ export class Storage {
 
       // console.warn('restore:', key, conf);
       if (cacheData) {
-        if (typeof store === 'function') {
+        if (isFunction(store)) {
           // 【主动调用】自定义恢复方法 fn(cacheData,conf)
           store.call(this, cacheData, conf);
         }
         else if (conf.restore !== true && conf.restore !== undefined) {
           // 【配置参数】conf.restore 可配置成自定义恢复缓存的函数
-          if (typeof conf.restore === 'function') {
+          if (isFunction(conf.restore)) {
             conf.restore.call(this, store, cacheData, conf);
           }
           // 若 conf.restore = false 则忽略不进行缓存恢复操作

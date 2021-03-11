@@ -1,7 +1,8 @@
 # @mudas/storage
 
-> 这是一个同时支持 sessionStorage、localStorage、cookie、map 存储数据的工具库
-This is a tool library that supports session Storage, local Storage, cookie, map to store data.
+> 这是一个同时支持 sessionStorage、localStorage、cookie、map 存储数据的工具库(This is a tool library that supports session Storage, local Storage, cookie, map to store data.)
+
+**Note:** This library does not support the development of mini programs.
 
 ![image](https://raw.githubusercontent.com/aosnow/assets/master/img/storage.png)
 

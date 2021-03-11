@@ -20,14 +20,14 @@
         <el-button @click="coverCache">重复覆盖存储（path: /）</el-button>
         <el-button @click="removeCoverCache">删除覆盖存储缓存</el-button>
         <el-button @click="getCache">取值</el-button>
-        <div>{{cacheData}}</div>
+        <div>{{ cacheData }}</div>
       </el-form-item>
 
       <el-form-item label="cover-test2">
         <el-button @click="coverCache2">重复覆盖存储（path: /index）</el-button>
         <el-button @click="removeCoverCache2">删除覆盖存储缓存</el-button>
         <el-button @click="getCache2">取值</el-button>
-        <div>{{cacheData2}}</div>
+        <div>{{ cacheData2 }}</div>
       </el-form-item>
 
       <el-form-item>
@@ -76,12 +76,14 @@ export default {
       login: 'user/login',
       logout: 'user/logout'
     }),
+
     userlogin() {
       const { username, password } = this;
       this.login({ username, password }).then(data => {
         console.warn('ui.userlogin', data);
       });
     },
+
     userexit() {
       this.logout().then(() => {
         Vue.storage.remove('user/login');
@@ -89,17 +91,13 @@ export default {
     },
 
     coverCache() {
-      const data = { a: Math.random() };
+      const data = { a: Math.random(), b: '测试1' };
       data[Math.random() * 100 >> 0] = 'rand key';
-      Vue.storage.cache('cover-test', data);
-    },
-
-    removeCoverCache() {
-      Vue.storage.remove('cover-test');
+      Vue.storage.cache('cover-test', data, { cookie: { path: '/' } });
     },
 
     coverCache2() {
-      const data = { a: Math.random() };
+      const data = { a: Math.random(), b: '测试2' };
       data[Math.random() * 100 >> 0] = 'rand key2';
       Vue.storage.cache('cover-test', data, { cookie: { path: '/index' } });
     },
@@ -108,12 +106,18 @@ export default {
       Vue.storage.remove('cover-test', { cookie: { path: '/index' } });
     },
 
+    removeCoverCache() {
+      Vue.storage.remove('cover-test', { cookie: { path: '/' } });
+    },
+
     getCache() {
       this.cacheData = Vue.storage.resolve('cover-test', { cookie: { path: '/' } });
+      console.warn('cacheData:', this.cacheData);
     },
 
     getCache2() {
       this.cacheData2 = Vue.storage.resolve('cover-test', { cookie: { path: '/index' } });
+      console.warn('cacheData2:', this.cacheData2);
     }
 
   }
