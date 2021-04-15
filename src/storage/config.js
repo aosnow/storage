@@ -7,6 +7,6 @@
 import { StorageType } from '@mudas/storage';
 
 export default [
-  { type: 'user/login', storage: StorageType.localStorage, expire: 1800 },
-  { type: 'cover-test', storage: StorageType.cookie, expire: 1800, restore: false, cookie: { path: '/' } }
+  { type: 'user/login', storage: StorageType.localStorage, expire: 1800, option: { unique: false } },
+  { type: 'cover-test', storage: StorageType.cookie, expire: 1800, restore: false, option: { path: '/', unique: false } }
 ];

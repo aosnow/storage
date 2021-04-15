@@ -102,15 +102,15 @@ export class Storage {
   /**
    * 分析获取缓存数据
    * @param {String|ConfigOptions} type
-   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
+   * @param {ConfigOptions} [options=null] 额外存储参数，可以覆盖 config
    * @return {*}
    */
   resolve(type, options = null) {
-    const conf = { ...(typeof type === 'string' ? this.config.get(type) : type), ...options };
+    const conf = merge({}, (typeof type === 'string' ? this.config.get(type) : type), options);
     if (!conf) return null; // 配置不存在
 
     // 尝试取缓存数据
-    let cacheData = this.state.getState(conf.type, conf.storage, conf[conf.storage]);
+    let cacheData = this.state.getState(conf.type, conf.storage, conf.option);
 
     // 检测数据缓存是否过期
     // 如果之前存放数据时设置了时间戳，且配置了过期时间，则检测过期逻辑
@@ -119,7 +119,7 @@ export class Storage {
         Storage.expired(cacheData.timestamp, conf.expire)) {
 
       // 移除缓存数据
-      this.state.removeState(conf.type, conf.storage);
+      this.state.removeState(conf.type, conf.storage, conf.option);
 
       // 清除临时数据，阻止使用缓存数据
       cacheData = null;
@@ -133,11 +133,11 @@ export class Storage {
    * @param {String} type 注册标识名
    * @param {*} payload 需要被缓存的数据
    * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
-   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
+   * @param {ConfigOptions} [options=null] 额外存储参数，可以覆盖 config
    */
   cache(type, payload, options = null, autoMerge = true) {
     const conf = merge({}, this.config.get(type), options);
-    const stateOption = merge({}, conf[conf.storage]);
+    const stateOption = merge({}, conf.option);
 
     if (conf.storage === StorageType.cookie) {
       // cookie 过期时间处理
@@ -162,12 +162,12 @@ export class Storage {
 
   /**
    * 移除指定 type 对应的缓存数据
-   * @param type
-   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
+   * @param {String} type 注册标识名
+   * @param {ConfigOptions} [options=null] 额外存储参数，可以覆盖 config
    */
   remove(type, options = null) {
     const conf = merge({}, this.config.get(type), options);
-    conf && this.state.removeState(conf.type, conf.storage, conf[conf.storage]);
+    conf && this.state.removeState(conf.type, conf.storage, conf.option);
   }
 
   /**

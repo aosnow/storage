@@ -5,26 +5,23 @@
 // ------------------------------------------------------------------------------
 
 import { Store } from 'vuex/types';
-import StorageConfig, { ConfigOptions } from './StorageConfig';
+import StorageConfig from './StorageConfig';
 import StorageState, { StateOptions } from './StorageState';
+import { ConfigOptions, CacheMethodOptions } from './config';
 
 export declare interface StorageOptions {
-  unique?:string,
-  state?:StateOptions,
-  config?:Array<ConfigOptions>
+  unique?: string;
+  state?: StateOptions;
+  config?: ConfigOptions[];
 }
 
-export declare interface CacheMethodOptions {
-  [index:string]:any;
-}
-
-type RestoreHandler = (cacheData:any, conf:any) => void;
+type RestoreHandler = (cacheData: any, conf: any) => void;
 
 declare class Storage {
-  constructor(options?:StorageOptions)
+  constructor(options?: StorageOptions)
 
-  config:StorageConfig;
-  state:StorageState;
+  config: StorageConfig;
+  state: StorageState;
 
   /**
    * 检测是否过期（单位：秒）
@@ -32,21 +29,22 @@ declare class Storage {
    * @param {Number} expire 过期时间
    * @returns {boolean}
    */
-  static expired(timestamp:number, expire:number):boolean;
+  static expired(timestamp: number, expire: number): boolean;
 
   /**
    * 针对当前应用设置唯一识别码（若不设置，则不启用“域规则”）
    * <p>针对不同的应用起到“作用域”的作用，以避免应用与应用之间的数据混乱问题</p>
    * @param {string} code 唯一码（长度必须大于5位，且不能是全字母或全数字），如“F@K%$JD&LF”，或者应用的网站域名“abc.com”
    */
-  setUnique(code:string):void;
+  setUnique(code: string): void;
 
   /**
    * 分析获取缓存数据
-   * @param {String|Object} type
+   * @param {String|ConfigOptions} type
+   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    * @return {*}
    */
-  resolve(type:string | ConfigOptions):any;
+  resolve(type: string | ConfigOptions, options?: CacheMethodOptions): any;
 
   /**
    * 缓存数据到浏览器缓存
@@ -55,20 +53,20 @@ declare class Storage {
    * @param {Boolean} [autoMerge=true] 是否合并到已经存在的缓存数据
    * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  cache(type:string, payload:any, options?:CacheMethodOptions, autoMerge?:boolean):void;
+  cache(type: string, payload: any, options?: CacheMethodOptions, autoMerge?: boolean): void;
 
   /**
    * 移除指定 type 对应的缓存数据
    * @param type
    * @param {Object} [options=null] 额外存储参数，可以覆盖 config
    */
-  remove(type:string, options?:CacheMethodOptions):void;
+  remove(type: string, options?: CacheMethodOptions): void;
 
   /**
    * 将已经缓存的数据恢复到 state 中
    * @param {Store|Function} store 由 store.dispatch 派发 Action 来触发缓存请求和恢复。也可以由自定义的方法fn(cacheData,conf)来完成缓存的恢复
    */
-  restore(store:Store<any> | RestoreHandler):void;
+  restore(store: Store<any> | RestoreHandler): void;
 }
 
 export default Storage;

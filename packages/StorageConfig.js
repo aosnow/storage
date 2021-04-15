@@ -23,14 +23,14 @@ class StorageConfig {
 
   /**
    * 注册需要进行持久化存储的 type 配置
-   * @param {Object} options 缓存规则配置
+   * @param {ConfigOptions} options 缓存规则配置
    */
   add(options) {
     // type 必须是已经定义的 mutation 名，若使用了 Module，需要指定完整包含 Module 和 type 的值，如“info/save”
     // storage 存储引擎类型：localStorage,sessionStorage（默认）,memory,cookie。推荐通过 STORAGE_TYPE 进行引用取得
     // expire 数据保持的时间，单位秒，过期后将重新请求新数据（默认：0，即不过期或随生命周期）
     // restore 控制在页面刷新重新进入应用时是否需要恢复缓存，若不在初始化时恢复缓存，则在主动发起第一次请求时才被恢复到 state。
-    const { type, storage = STORAGE_TYPE.sessionStorage, expire, restore = true, ...other } = options;
+    const { type, storage = STORAGE_TYPE.sessionStorage, expire, restore = false, ...other } = options;
 
     if (typeof type !== 'string' || typeof expire !== 'number' || !STORAGE_TYPE.valid(storage)) {
       throw new Error(`Invalid persistent state configuration: ${JSON.stringify(options, null, '  ')}`);
@@ -71,7 +71,7 @@ class StorageConfig {
   /**
    * 移除已经注册的 type
    * <p>移除后，将直接使用请求取数据，从而忽略缓存</p>
-   * @param type
+   * @param {String} type
    */
   remove(type) {
     if (this.has(type)) {

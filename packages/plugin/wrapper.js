@@ -5,7 +5,6 @@
 // ------------------------------------------------------------------------------
 
 import InterceptorAction from './action';
-// import { isPromise } from '../utils';
 
 const ActionName = '__interceptorAction';
 

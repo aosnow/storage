@@ -93,30 +93,30 @@ export default {
     coverCache() {
       const data = { a: Math.random(), b: '测试1' };
       data[Math.random() * 100 >> 0] = 'rand key';
-      Vue.storage.cache('cover-test', data, { cookie: { path: '/' } });
+      Vue.storage.cache('cover-test', data, { option: { path: '/' } });
     },
 
     coverCache2() {
       const data = { a: Math.random(), b: '测试2' };
       data[Math.random() * 100 >> 0] = 'rand key2';
-      Vue.storage.cache('cover-test', data, { cookie: { path: '/index' } });
+      Vue.storage.cache('cover-test', data, { option: { path: '/index' } });
     },
 
     removeCoverCache2() {
-      Vue.storage.remove('cover-test', { cookie: { path: '/index' } });
+      Vue.storage.remove('cover-test', { option: { path: '/index' } });
     },
 
     removeCoverCache() {
-      Vue.storage.remove('cover-test', { cookie: { path: '/' } });
+      Vue.storage.remove('cover-test', { option: { path: '/' } });
     },
 
     getCache() {
-      this.cacheData = Vue.storage.resolve('cover-test', { cookie: { path: '/' } });
+      this.cacheData = Vue.storage.resolve('cover-test', { option: { path: '/' } });
       console.warn('cacheData:', this.cacheData);
     },
 
     getCache2() {
-      this.cacheData2 = Vue.storage.resolve('cover-test', { cookie: { path: '/index' } });
+      this.cacheData2 = Vue.storage.resolve('cover-test', { option: { path: '/index' } });
       console.warn('cacheData2:', this.cacheData2);
     }
 

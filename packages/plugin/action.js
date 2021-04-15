@@ -4,10 +4,11 @@
 // created: 2019.08.05 上午 0:22
 // ------------------------------------------------------------------------------
 
-import { isFunction, isPlainObject, isString, isArray } from '@mudas/util';
+import { isFunction } from '@mudas/util';
 
 function isValidData(data) {
-  return isPlainObject(data) || isArray(data) || isString(data);
+  // return isPlainObject(data) || isArray(data) || isString(data);
+  return data !== undefined;
 }
 
 function decidedError(reason, error, reject) {

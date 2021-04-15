@@ -15,7 +15,7 @@ class StorageState {
 
   /**
    * 构建实例
-   * @param {{expire:Number, storage:String}|null} [options] 全局配置，可通过私有配置进行覆盖
+   * @param {StateOptions|null} [options=null] 全局配置，可通过私有配置进行覆盖
    */
   constructor(options = null) {
     this._options = merge({}, StorageState.DefaultOptions, options);
@@ -39,7 +39,6 @@ class StorageState {
 
   /**
    * 配置信息
-   * @type {{expire:Number, storage:String}|null}
    * @private
    */
   _options;
@@ -119,12 +118,12 @@ class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {Object} state 需要存储的状态数据
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
-   * @param {Object} [options=null] 额外参数
+   * @param {CacheMethodOptions} [options=null] 额外参数
    * @returns {*|void}
    */
   setState(key, state, storageType = StorageType.sessionStorage, options = null) {
     const s = this._storage(storageType);
-    const k = this.genKey(key);
+    const k = this.genKey(key, options && options.unique !== undefined ? options.unique : true);
     return s.setItem(k, state, options);
   }
 
@@ -133,13 +132,13 @@ class StorageState {
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
    * @param {Object} [value] 缺省值。前者无值时的替代方案
-   * @param {Object} [options=null] 额外参数
+   * @param {CacheMethodOptions} [options=null] 额外参数
    * @returns {*}
    */
   getState(key, storageType, options = null, value = null) {
     const s = this._storage(storageType);
-    const k = this.genKey(key);
-    const r = s.getItem(k, options);
+    const k = this.genKey(key, options && options.unique !== undefined ? options.unique : true);
+    const r = s.getItem(k);
     return r ? r : value;
   }
 
@@ -147,21 +146,25 @@ class StorageState {
    * 移除指定状态缓存
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
    * @param {String} [storageType] 存储引擎类型，若不设置默认以 sessionStorage 引擎
-   * @param {Object} [options=null] 额外参数
+   * @param {CacheMethodOptions} [options=null] 额外参数
    * @returns {void}
    */
   removeState(key, storageType, options = null) {
     const s = this._storage(storageType);
-    const k = this.genKey(key);
+    const k = this.genKey(key, options && options.unique !== undefined ? options.unique : true);
     s.removeItem(k, options);
   }
 
   /**
    * 经过处理后的 key
    * @param {String} key 唯一性的识别码（一般对应到后端接口名或者 mutation-type）
+   * @param {Boolean} [unique=true] 是否使用 unique key 进行二次编码再进行缓存使用
    * @returns {string}
    */
-  genKey(key) {
+  genKey(key, unique = true) {
+    // 强制关闭不使用“域规则”
+    if (!unique) return key;
+
     // 若未设置 unique，则不使用“域规则”
     const uniqueKey = `[${this.unique || 'root'}]`;
     return this.unique ? `${key}@${uniqueKey}` : key;
