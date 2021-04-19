@@ -1,6 +1,6 @@
 {
   "name": "@mudas/storage",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "This is a tool library that supports session Storage, local Storage, cookie, map to store data",
   "author": "mudas",
   "license": "MIT",
@@ -42,7 +42,8 @@
   },
   "devDependencies": {
     "@mudas/http": "0.1.0",
-    "@mudas/util": ">=0.0.10",
+    "@mudas/store": "0.0.7",
+    "@mudas/util": "~0.0.10",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",

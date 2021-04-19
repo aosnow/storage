@@ -38,7 +38,7 @@ export interface ConfigOptions {
   expire?: number;
 
   // restore 控制在页面刷新重新进入应用时是否需要恢复缓存，若不在初始化时恢复缓存，则在主动发起第一次请求时才被恢复到 state。
-  restore?: boolean | RestoreHandler;
+  restore?: boolean | 'commit' | RestoreHandler;
 
   // 各存储引擎（StorageType.cookie）对应的扩展配置参数
   option?: CookieOptions | CacheMethodOptions;

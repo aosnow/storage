@@ -101,12 +101,12 @@ export class Storage {
 
   /**
    * 分析获取缓存数据
-   * @param {String|ConfigOptions} type
+   * @param {String} type
    * @param {ConfigOptions} [options=null] 额外存储参数，可以覆盖 config
    * @return {*}
    */
   resolve(type, options = null) {
-    const conf = merge({}, (typeof type === 'string' ? this.config.get(type) : type), options);
+    const conf = merge({}, this.config.get(type), options);
     if (!conf) return null; // 配置不存在
 
     // 尝试取缓存数据
@@ -177,7 +177,7 @@ export class Storage {
   restore(store) {
     this.config.forEach((conf, key) => {
       // 只对已经存在缓存数据的配置进行
-      const cacheData = this.resolve(conf);
+      const cacheData = this.resolve(key);
 
       // console.warn('restore:', key, conf);
       if (cacheData) {
@@ -185,18 +185,28 @@ export class Storage {
           // 【主动调用】自定义恢复方法 fn(cacheData,conf)
           store.call(this, cacheData, conf);
         }
-        else if (conf.restore !== true && conf.restore !== undefined) {
+
+        // 自定义缓存恢复
+        else if (isFunction(conf.restore)) {
           // 【配置参数】conf.restore 可配置成自定义恢复缓存的函数
-          if (isFunction(conf.restore)) {
-            conf.restore.call(this, store, cacheData, conf);
-          }
-          // 若 conf.restore = false 则忽略不进行缓存恢复操作
+          conf.restore.call(this, store, cacheData, conf);
+
         }
-        else {
+
+        // 自动化 commit 提交到相应的 type
+        else if (conf.restore === 'commit') {
+          // 未传入自定义恢复方法和配置项目中的自定义方法则默认调用 dispatch(actionName) 来间接恢复缓存到 vuex
+          // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
+          store.commit(key, cacheData.payload);
+        }
+
+        // 自动化使用 action 拦截方法来代理使用缓存
+        else if (conf.restore === true) {
           // 未传入自定义恢复方法和配置项目中的自定义方法则默认调用 dispatch(actionName) 来间接恢复缓存到 vuex
           // 当存在缓存数据时，无需传入任何参数，指向用户 action 进行缓存 commit 到 state
           store.dispatch(key);
         }
+        // 若 conf.restore = false 则忽略不进行缓存恢复操作
       }
     });
   }

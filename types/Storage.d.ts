@@ -40,8 +40,8 @@ declare class Storage {
 
   /**
    * 分析获取缓存数据
-   * @param {String|ConfigOptions} type
-   * @param {Object} [options=null] 额外存储参数，可以覆盖 config
+   * @param {String} type
+   * @param {ConfigOptions} [options=null] 额外存储参数，可以覆盖 config
    * @return {*}
    */
   resolve(type: string | ConfigOptions, options?: CacheMethodOptions): any;

@@ -66,7 +66,7 @@ export default {
 
   computed: {
     loginfo() {
-      return this.$store.getters['user/loginfo'];
+      return this.$store.getters['user/login'];
     }
   },
 
